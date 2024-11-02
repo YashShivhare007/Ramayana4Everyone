@@ -6,7 +6,6 @@ import "leaflet/dist/images/marker-shadow.png";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
 import L from "leaflet";
-import "../map.css";
 import "leaflet-arrowheads";
 
 const customIcon = new L.Icon({
