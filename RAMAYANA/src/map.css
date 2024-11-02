@@ -1,0 +1,8 @@
+.custom-popup .leaflet-popup-content-wrapper {
+    @apply bg-gray-100 rounded-lg;
+  }
+  
+  .custom-popup .leaflet-popup-tip-container {
+    display: none; /* Optional: hide the small arrow pointer */
+  }
+  

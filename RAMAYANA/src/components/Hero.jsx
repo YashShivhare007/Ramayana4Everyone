@@ -13,7 +13,7 @@ import Chatbot from "./Chatbot";
 //   backgroundRepeat: "no-repeat",
 // };
 
-const Hero = ({sharedVariable,setSharedVariable}) => {
+const Hero = () => {
   const [selectedPeriod, setSelectedPeriod] = useState("all"); // Default to 'all'
   const handlePeriodChange = (period) => {
     setSelectedPeriod(period);
@@ -28,7 +28,7 @@ const Hero = ({sharedVariable,setSharedVariable}) => {
         </div>
         {/* Map Content */}
         <div className=" h-[75vh] z-0">
-          <Map selectedPeriod={selectedPeriod} sharedVariable={sharedVariable} setSharedVariable={setSharedVariable} />
+          <Map selectedPeriod={selectedPeriod} />
         </div>
         {/* Footer Content */}
         <div className="z-10">

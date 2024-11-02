@@ -7,16 +7,20 @@ import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
 import L from "leaflet";
 import "leaflet-arrowheads";
-const customIcon = new L.Icon({
-  iconUrl: markerIcon,
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
-  shadowUrl: markerShadow,
-  shadowSize: [41, 41],
-  shadowAnchor: [12, 41],
-});
+import "../map.css";
 
-function Map({ selectedPeriod, sharedVariable, setSharedVariable }) {
+const markerIcons = {
+  all: "/images/marker/blue.png",
+  bala: "/images/marker/red.png",
+  ayodhya: "/images/marker/green.png",
+  aranya: "/images/marker/orange.png",
+  kishkindha: "/images/marker/purple.png",
+  sundara: "/images/marker/yellow.png",
+  yuddha: "/images/marker/maroon.png",
+  uttara: "/images/marker/maroon.png",
+};
+
+function Map({ selectedPeriod }) {
   const [isLocationsVisible, setIsLocationsVisible] = useState(false);
   const [isSidebarVisible, setIsSidebarVisible] = useState(false);
   const [currData, setCurrData] = useState([]);
@@ -27,6 +31,19 @@ function Map({ selectedPeriod, sharedVariable, setSharedVariable }) {
   const [mapCenter, setMapCenter] = useState([23.512, 80.329]);
   const [mapZoom, setMapZoom] = useState(4);
   const mapRef = useRef(); // Move mapRef here
+  const [customIcon, setCustomIcon] = useState(null);
+
+  // Function to create a custom icon based on the selected period
+  const createCustomIcon = (iconUrl) => {
+    return new L.Icon({
+      iconUrl: iconUrl,
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      shadowUrl: "../icons/marker-shadow.png", // Replace with actual shadow URL if needed
+      shadowSize: [41, 41],
+      shadowAnchor: [12, 41],
+    });
+  };
 
   const toggleSidebar = () => {
     setIsSidebarVisible(!isSidebarVisible);
@@ -36,21 +53,22 @@ function Map({ selectedPeriod, sharedVariable, setSharedVariable }) {
   };
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth > 768) { // Adjust as per your md breakpoint
+      if (window.innerWidth > 768) {
+        // Adjust as per your md breakpoint
         hideSidebar();
       }
     };
-  
+
     window.addEventListener("resize", handleResize);
-    
+
     return () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
-  
+
   // To set the location and data of particular kanda
   useEffect(() => {
-      const fetchData = async () => {
+    const fetchData = async () => {
       try {
         fetch("../json/story/" + selectedPeriod + ".json")
           .then((response) => response.json())
@@ -73,6 +91,12 @@ function Map({ selectedPeriod, sharedVariable, setSharedVariable }) {
   }, [selectedPeriod]);
 
   useEffect(() => {
+    // Create a custom icon based on the selected period
+    const iconUrl = markerIcons[selectedPeriod] || markerIcons.period1; // Fallback to a default icon
+    setCustomIcon(createCustomIcon(iconUrl));
+  }, [selectedPeriod]);
+
+  useEffect(() => {
     // Automatically open the first popup when the component mounts
     if (filteredData.length > 0) {
       const marker = markersRef.current[0];
@@ -80,24 +104,10 @@ function Map({ selectedPeriod, sharedVariable, setSharedVariable }) {
         const latLng = marker.getLatLng();
         setMapCenter(latLng);
         setMapZoom(6);
-        setSharedVariable(filteredData[0]);
         marker.openPopup();
       }
     }
   }, [filteredData]);
-
-  const handlePlaceClick = (index) => {
-    const marker = markersRef.current[index];
-    if (marker) {
-      const latLng = marker.getLatLng();
-      setMapCenter(latLng);
-      setMapZoom(6);
-      setSharedVariable(filteredData[index]);
-      marker.openPopup();
-    } else {
-      console.error("Marker not found at index:", index);
-    }
-  };
 
   useEffect(() => {
     // Automatically open the first popup when the component mounts
@@ -134,14 +144,34 @@ function Map({ selectedPeriod, sharedVariable, setSharedVariable }) {
 
   const [currentIndex, setCurrentIndex] = useState(0);
 
+  const getZoom = (marker, nextMarker) => {
+    if (marker && nextMarker) {
+      const latLng = marker.getLatLng();
+      const nextLatLng = nextMarker.getLatLng();
+      const bounds = L.latLngBounds([latLng, nextLatLng]);
+      return Math.min(10, mapRef.current.getBoundsZoom(bounds));
+    }
+    return 6;
+  };
+
+  const getMapCenter = (marker, nextMarker) => {
+    const latLng = marker.getLatLng();
+    if (marker && nextMarker) {
+      const nextLatLng = nextMarker.getLatLng();
+      return L.latLngBounds([latLng, nextLatLng]).getCenter();
+    }
+    return latLng;
+  };
+
   const openPopupWithList = (idx) => {
     setCurrentIndex(idx); // Set the current index to show the appropriate popup content
     const marker = markersRef.current[idx];
+    const nextMarker = markersRef.current[idx + 1]; // Get the next marker
+    let zoom = getZoom(marker, nextMarker) - 1;
+    let mapCenter = getMapCenter(marker, nextMarker);
     if (marker) {
-      const latLng = marker.getLatLng();
-      setMapCenter(latLng);
-      setMapZoom(6);
-      setSharedVariable(filteredData[idx]);
+      setMapCenter(mapCenter);
+      setMapZoom(zoom);
       marker.openPopup();
     } else {
       console.error("Marker not found at index:", idx);
@@ -218,7 +248,7 @@ function Map({ selectedPeriod, sharedVariable, setSharedVariable }) {
                     click: () => handleButtonClick(index),
                   }}
                 >
-                  <Popup>
+                  <Popup className="custom-popup">
                     <div className="popup-buttons-container">
                       {/* Incident List */}
                       {getIncidentPointIndexes(place).map(
@@ -279,7 +309,7 @@ function Map({ selectedPeriod, sharedVariable, setSharedVariable }) {
         } justify-center`}
       >
         <div className="flex justify-center text-2xl font-bold font-serif py-4 underline">
-          LOCATIONS LIST
+          Incident List
         </div>
         <button
           className="z-30 lg:hidden absolute top-1/2 -left-10 transform -translate-y-1/2 bg-orange-600 text-white px-3 py-2 rounded-e-md"
