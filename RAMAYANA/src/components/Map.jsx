@@ -7,7 +7,6 @@ import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
 import L from "leaflet";
 import "leaflet-arrowheads";
-
 const customIcon = new L.Icon({
   iconUrl: markerIcon,
   iconSize: [25, 41],
@@ -35,20 +34,32 @@ function Map({ selectedPeriod, sharedVariable, setSharedVariable }) {
   const hideSidebar = () => {
     setIsSidebarVisible(false);
   };
-
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth > 768) { // Adjust as per your md breakpoint
+        hideSidebar();
+      }
+    };
+  
+    window.addEventListener("resize", handleResize);
+    
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+  
   // To set the location and data of particular kanda
   useEffect(() => {
-    window.addEventListener("resize", hideSidebar);
-    const fetchData = async () => {
+      const fetchData = async () => {
       try {
-        fetch("/src/json/story/" + selectedPeriod + ".json")
+        fetch("../json/story/" + selectedPeriod + ".json")
           .then((response) => response.json())
           .then((data) => {
             setCurrData(data.points);
             setFilteredData(data.points);
           });
 
-        fetch("/src/json/story/location.json")
+        fetch("../json/story/location.json")
           .then((response) => response.json())
           .then((data) => {
             setLocation(data);

@@ -1,16 +1,9 @@
 import React, { useState, useEffect } from "react";
-
+import kandaData from "../../json/kanda.json";
 function CompleteRamayana({ onClose }) {
-  const [kandas, setKandas] = useState([]);
+  const [kandas] = useState(kandaData);
   const [selectedKanda, setSelectedKanda] = useState(null);
 
-  useEffect(() => {
-    // Fetch Kanda data
-    fetch("/src/json/kanda.json")
-      .then((response) => response.json())
-      .then((data) => setKandas(data))
-      .catch((error) => console.error("Error fetching kanda data:", error));
-  }, []);
 
   const handleKandaSelect = (kanda) => {
     setSelectedKanda(kanda);
@@ -70,7 +63,7 @@ In conclusion, the Ramayana stands as a testament to the enduring power of story
               src={
                 selectedKanda
                   ? selectedKanda.image
-                  : "/src/images/kanda/image1.png"
+                  : "/images/kanda/image1.png"
               }
               alt={selectedKanda ? selectedKanda.kanda : "Overview Image"}
               className="rounded-lg max-w-full max-h-full object-cover transition-all duration-300"

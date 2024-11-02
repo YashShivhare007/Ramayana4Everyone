@@ -1,17 +1,10 @@
 import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
-
+import otherCharactersData from "../../json/characters.json";
 function OtherCharacters({ onClose }) {
-  const [characters, setCharacters] = useState([]);
+  const [characters, setCharacters] = useState(otherCharactersData);
   const [selectedCharacter, setSelectedCharacter] = useState(null);
 
-  useEffect(() => {
-    // Fetch character data
-    fetch("/src/json/characters.json")
-      .then((response) => response.json())
-      .then((data) => setCharacters(data))
-      .catch((error) => console.error("Error fetching character data:", error));
-  }, []);
 
   const openCharacterModal = (character) => {
     setSelectedCharacter(character);

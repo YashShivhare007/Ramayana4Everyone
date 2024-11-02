@@ -1,15 +1,8 @@
 import React, { useState, useEffect } from "react";
-
+import referenceStoriesData from "../../json/referencestory.json";
 function ReferenceStories({ onClose }) {
-  const [referenceStories, setReferenceStories] = useState([]);
+  const [referenceStories] = useState(referenceStoriesData);
   const [selectedStory, setSelectedStory] = useState(null);
-
-  useEffect(() => {
-    fetch("/src/json/referencestory.json")
-      .then((response) => response.json())
-      .then((data) => setReferenceStories(data))
-      .catch((error) => console.error("Error fetching reference story data:", error));
-  }, []);
 
   const openStoryModal = (story) => {
     setSelectedStory(story);

@@ -1,7 +1,6 @@
 import React from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes } from "@fortawesome/free-solid-svg-icons";
-
 function Summary({ onClose }) {
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75 z-50 mt-16">
@@ -49,9 +48,7 @@ function Summary({ onClose }) {
         
         {/* Right Side: Image */}
         <div className="w-full lg:w-1/2 flex items-center justify-center p-4">
-          <img
-            src="/src/images/kanda/image.png"
-            alt="Ramayana Summary"
+            <img src="images/kanda/image.png" alt="Summary"
             className="h-64 md:h-full w-full object-cover rounded-lg border border-orange-500"
           />
         </div>
