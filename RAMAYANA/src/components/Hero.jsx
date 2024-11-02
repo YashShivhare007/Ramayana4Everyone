@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 // import BgImage from "../assets/bgImage.jpg";
-import Navbar from "./Navbar";
+import Navbar from "./Navbar/Navbar";
 import { FaArrowRight } from "react-icons/fa";
 import Map from "./Map";
 import Footer from "./Footer";

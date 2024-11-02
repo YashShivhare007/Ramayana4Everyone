@@ -57,7 +57,7 @@ function Footer({ onPeriodChange }) {
           label="BALA"
           timeframe="Childhood of Rama"
           textColor={textColor}
-          onClick={() => onPeriodChange("ancient")}
+          onClick={() => onPeriodChange("bala")}
         />
         <span className={textColor} style={{ fontSize: '2rem' }}>|</span>
         <DockIcon
@@ -65,7 +65,7 @@ function Footer({ onPeriodChange }) {
           label="AYODHYA"
           timeframe="Rama's Exile"
           textColor={textColor}
-          onClick={() => onPeriodChange("medieval")}
+          onClick={() => onPeriodChange("ayodhya")}
         />
         <span className={textColor} style={{ fontSize: '2rem' }}>|</span>
         <DockIcon
@@ -73,7 +73,7 @@ function Footer({ onPeriodChange }) {
           label="ARANYA"
           timeframe="Forest Life"
           textColor={textColor}
-          onClick={() => onPeriodChange("modern")}
+          onClick={() => onPeriodChange("aranya")}
         />
         <span className={textColor} style={{ fontSize: '2rem' }}>|</span>
         <DockIcon
@@ -81,7 +81,7 @@ function Footer({ onPeriodChange }) {
           label="KISHKINDHA"
           timeframe="Alliance with Sugriva"
           textColor={textColor}
-          onClick={() => onPeriodChange("ancient")}
+          onClick={() => onPeriodChange("kishkindha")}
         />
         <span className={textColor} style={{ fontSize: '2rem' }}>|</span>
         <DockIcon
@@ -89,15 +89,15 @@ function Footer({ onPeriodChange }) {
           label="SUNDARA"
           timeframe="Hanuman's Odyssey"
           textColor={textColor}
-          onClick={() => onPeriodChange("medieval")}
+          onClick={() => onPeriodChange("sundara")}
         />
         <span className={textColor} style={{ fontSize: '2rem' }}>|</span>
         <DockIcon
-          icon={faFistRaised} // Fist icon for "Yudhakanda"
-          label="YUDHA"
+          icon={faFistRaised} // Fist icon for "Yuddhakanda"
+          label="YUDDHA"
           timeframe="War with Ravana"
           textColor={textColor}
-          onClick={() => onPeriodChange("modern")}
+          onClick={() => onPeriodChange("yuddha")}
         />
       </Dock>
 
@@ -108,7 +108,7 @@ function Footer({ onPeriodChange }) {
           label="BALA"
           timeframe="Childhood of Rama"
           textColor={textColor}
-          onClick={() => onPeriodChange("ancient")}
+          onClick={() => onPeriodChange("bala")}
         />
         <span className={textColor} style={{ fontSize: '2rem' }}>|</span>
         <DockIcon
@@ -116,7 +116,7 @@ function Footer({ onPeriodChange }) {
           label="AYODHYA"
           timeframe="Rama's Exile"
           textColor={textColor}
-          onClick={() => onPeriodChange("medieval")}
+          onClick={() => onPeriodChange("ayodhya")}
         />
         <span className={textColor} style={{ fontSize: '2rem' }}>|</span>
         <DockIcon
@@ -124,7 +124,7 @@ function Footer({ onPeriodChange }) {
           label="ARANYA"
           timeframe="Forest Life"
           textColor={textColor}
-          onClick={() => onPeriodChange("modern")}
+          onClick={() => onPeriodChange("aranya")}
         />
       </Dock>
       <Dock className="lg:hidden">
@@ -133,7 +133,7 @@ function Footer({ onPeriodChange }) {
           label="KISHKINDHA"
           timeframe="Alliance with Sugriva"
           textColor={textColor}
-          onClick={() => onPeriodChange("ancient")}
+          onClick={() => onPeriodChange("kishkindha")}
         />
         <span className={textColor} style={{ fontSize: '2rem' }}>|</span>
         <DockIcon
@@ -141,15 +141,15 @@ function Footer({ onPeriodChange }) {
           label="SUNDARA"
           timeframe="Hanuman's Odyssey"
           textColor={textColor}
-          onClick={() => onPeriodChange("medieval")}
+          onClick={() => onPeriodChange("sundara")}
         />
         <span className={textColor} style={{ fontSize: '2rem' }}>|</span>
         <DockIcon
-          icon={faFistRaised} // Fist icon for "Yudhakanda"
-          label="YUDHA"
+          icon={faFistRaised} // Fist icon for "Yuddhakanda"
+          label="YUDDHA"
           timeframe="War with Ravana"
           textColor={textColor}
-          onClick={() => onPeriodChange("modern")}
+          onClick={() => onPeriodChange("yuddha")}
         />
       </Dock>
     </div>

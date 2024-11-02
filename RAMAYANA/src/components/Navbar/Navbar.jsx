@@ -5,7 +5,7 @@ import Contact from "./Contact";
 import Feedback from "./Feedback";
 import About from "./About";
 import Learnings from "./Learnings";
-import Logo1 from "../assets/logo1.png";
+import Logo1 from "../../assets/logo1.png";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import { FaBars } from "react-icons/fa";

@@ -1,11 +1,12 @@
 import { FaChevronRight } from "react-icons/fa"; // Import arrow icon
-import CompleteRamayana from "./CompleteRamayana";
-import Summary from "./Summary";
-import RamaOrigin from "./RamaOrigin";
-import RavanaOrigin from "./RavanaOrigin";
-import OtherCharacters from "./OtherCharacters";
-import ReferenceStories from "./ReferenceStories";
+import CompleteRamayana from "../SideNavbar/CompleteRamayana";
+import Summary from "../SideNavbar/Summary";
+import RamaOrigin from "../SideNavbar/RamaOrigin";
+import RavanaOrigin from "../SideNavbar/RavanaOrigin";
+import OtherCharacters from "../SideNavbar/OtherCharacters";
+import ReferenceStories from "../SideNavbar/ReferenceStories";
 import { useState } from "react";
+
 const Sidebar2 = ({isOpen}) => {
   const [isCompleteRamayanaOpen, setIsCompleteRamayanaOpen] = useState(false);
   const [isSummaryOpen, setIsSummaryOpen] = useState(false);

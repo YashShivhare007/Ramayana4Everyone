@@ -1,10 +1,13 @@
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import "leaflet/dist/images/marker-icon-2x.png";
 import "leaflet/dist/images/marker-shadow.png";
 import markerIcon from "leaflet/dist/images/marker-icon.png";
 import markerShadow from "leaflet/dist/images/marker-shadow.png";
+import L from "leaflet";
+import "../map.css";
+import "leaflet-arrowheads";
 
 const customIcon = new L.Icon({
   iconUrl: markerIcon,
@@ -25,6 +28,7 @@ function Map({ selectedPeriod, sharedVariable, setSharedVariable }) {
   const markersRef = useRef([]);
   const [mapCenter, setMapCenter] = useState([23.512, 80.329]);
   const [mapZoom, setMapZoom] = useState(4);
+  const mapRef = useRef(); // Move mapRef here
 
   const toggleSidebar = () => {
     setIsSidebarVisible(!isSidebarVisible);
@@ -32,28 +36,24 @@ function Map({ selectedPeriod, sharedVariable, setSharedVariable }) {
   const hideSidebar = () => {
     setIsSidebarVisible(false);
   };
+
+  // To set the location and data of particular kanda
   useEffect(() => {
-    window.addEventListener("resize",hideSidebar);
+    window.addEventListener("resize", hideSidebar);
     const fetchData = async () => {
       try {
-        let dataUrl = `https://backend-node-y6o2.onrender.com/${selectedPeriod}/data`;
-        let locationUrl = `https://backend-node-y6o2.onrender.com/${selectedPeriod}/location`;
+        fetch("/src/json/story/" + selectedPeriod + ".json")
+          .then((response) => response.json())
+          .then((data) => {
+            setCurrData(data.points);
+            setFilteredData(data.points);
+          });
 
-        const [dataResponse, locationResponse] = await Promise.all([
-          fetch(dataUrl),
-          fetch(locationUrl),
-        ]);
-
-        if (!dataResponse.ok || !locationResponse.ok) {
-          throw new Error("Network response was not ok");
-        }
-
-        const data = await dataResponse.json();
-        const locData = await locationResponse.json();
-
-        setCurrData(data.points);
-        setFilteredData(data.points);
-        setLocation(locData);
+        fetch("/src/json/story/location.json")
+          .then((response) => response.json())
+          .then((data) => {
+            setLocation(data);
+          });
       } catch (error) {
         console.error("There was a problem with the fetch operation:", error);
       }
@@ -61,6 +61,20 @@ function Map({ selectedPeriod, sharedVariable, setSharedVariable }) {
 
     fetchData();
   }, [selectedPeriod]);
+
+  useEffect(() => {
+    // Automatically open the first popup when the component mounts
+    if (filteredData.length > 0) {
+      const marker = markersRef.current[0];
+      if (marker) {
+        const latLng = marker.getLatLng();
+        setMapCenter(latLng);
+        setMapZoom(6);
+        setSharedVariable(filteredData[0]);
+        marker.openPopup();
+      }
+    }
+  }, [filteredData]);
 
   const handlePlaceClick = (index) => {
     const marker = markersRef.current[index];
@@ -75,21 +89,93 @@ function Map({ selectedPeriod, sharedVariable, setSharedVariable }) {
     }
   };
 
+  useEffect(() => {
+    // Automatically open the first popup when the component mounts
+    if (filteredData.length > 0) {
+      const marker = markersRef.current[0];
+      if (marker) {
+        // Use setTimeout to ensure the marker is rendered before opening the popup
+        setTimeout(() => {
+          marker.openPopup();
+        }, 0); // Adjust the timeout as needed; using 0 ensures it's run after the rendering is complete
+        handleButtonClick(0);
+      }
+    }
+  }, [filteredData]);
+
   const handleSearch = (event) => {
     const query = event.target.value.toLowerCase();
     setSearchQuery(query);
     const filtered = currData.filter((place) =>
-      place.city.toLowerCase().includes(query)
+      place.topic.toLowerCase().includes(query)
     );
     setFilteredData(filtered);
   };
 
   const MapController = ({ center, zoom }) => {
     const map = useMap();
+    // const mapRef = useRef(map);
     useEffect(() => {
+      mapRef.current = map;
       map.setView(center, zoom);
     }, [center, zoom, map]);
     return null;
+  };
+
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const openPopupWithList = (idx) => {
+    setCurrentIndex(idx); // Set the current index to show the appropriate popup content
+    const marker = markersRef.current[idx];
+    if (marker) {
+      const latLng = marker.getLatLng();
+      setMapCenter(latLng);
+      setMapZoom(6);
+      setSharedVariable(filteredData[idx]);
+      marker.openPopup();
+    } else {
+      console.error("Marker not found at index:", idx);
+    }
+  };
+
+  const getIncidentPointIndexes = (point) => {
+    return currData.filter((item) => item.location === point.location);
+  };
+
+  const currentArrowRef = useRef(); // Variable to hold the current arrow
+  const drawArrow = (fromLatLng, toLatLng) => {
+    const latLngs = [fromLatLng, toLatLng];
+
+    // Remove the existing arrow if it exists
+    if (currentArrowRef.current) {
+      mapRef.current.removeLayer(currentArrowRef.current);
+    }
+
+    // Create a new polyline for the arrow with an arrowhead
+    currentArrowRef.current = L.polyline(latLngs, {
+      color: "blue",
+      weight: 2,
+      opacity: 0,
+    }).addTo(mapRef.current);
+
+    // Add arrowhead to the polyline
+    currentArrowRef.current.arrowheads({
+      size: "8px",
+      fill: "blue",
+      frequency: "10px",
+    });
+  };
+
+  const handleButtonClick = (idx) => {
+    openPopupWithList(idx);
+    const currentMarker = markersRef.current[idx];
+    const nextMarker = markersRef.current[idx + 1]; // Get the next marker
+
+    if (currentMarker && nextMarker) {
+      drawArrow(currentMarker.getLatLng(), nextMarker.getLatLng());
+    } else {
+      console.log("One of the markers is not defined");
+    }
   };
 
   return (
@@ -104,9 +190,13 @@ function Map({ selectedPeriod, sharedVariable, setSharedVariable }) {
             attribution='© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
-          <MapController center={mapCenter} zoom={mapZoom} />
+          <MapController
+            center={mapCenter}
+            zoom={mapZoom}
+            drawArrow={drawArrow}
+          />
           {filteredData.map((place, index) => {
-            const coordinates = location[place.city];
+            const coordinates = location[place.location];
             if (coordinates) {
               return (
                 <Marker
@@ -115,10 +205,54 @@ function Map({ selectedPeriod, sharedVariable, setSharedVariable }) {
                   icon={customIcon}
                   ref={(el) => (markersRef.current[index] = el)}
                   eventHandlers={{
-                    click: () => handlePlaceClick(index),
+                    click: () => handleButtonClick(index),
                   }}
                 >
-                  <Popup>{place.city}</Popup>
+                  <Popup>
+                    <div className="popup-buttons-container">
+                      {/* Incident List */}
+                      {getIncidentPointIndexes(place).map(
+                        (incidentPoint, i, arr) => (
+                          <React.Fragment key={i}>
+                            <button
+                              className="popup-button px-1.5 py-1 mx-0.5 mb-2 border border-gray-400 rounded-md"
+                              onClick={() =>
+                                handleButtonClick(incidentPoint.no - 1)
+                              }
+                            >
+                              {incidentPoint.no}
+                            </button>
+                          </React.Fragment>
+                        )
+                      )}
+
+                      {/* Heading */}
+                      <h3 className="popup-heading font-semibold pb-1">
+                        {place.no}. {place.topic}
+                      </h3>
+
+                      {/* Content */}
+                      <div className="popup-content pb-2">{place.content}</div>
+
+                      {/* Navigation Buttons */}
+                      {index - 1 >= 0 && (
+                        <button
+                          className="popup-button border border-gray-400 rounded-md px-1.5 py-0.5 mx-0.5"
+                          onClick={() => handleButtonClick(index - 1)}
+                        >
+                          Prev
+                        </button>
+                      )}
+                      {index + 1 < currData.length && (
+                        <button
+                          className="popup-button border border-gray-400 rounded-md px-1.5 py-0.5 mx-0.5"
+                          onClick={() => handleButtonClick(index + 1)}
+                        >
+                          Next
+                        </button>
+                      )}
+                    </div>
+                  </Popup>
                 </Marker>
               );
             }
@@ -133,7 +267,6 @@ function Map({ selectedPeriod, sharedVariable, setSharedVariable }) {
             ? "absolute top-0 right-0 h-full w-3/5 z-30"
             : "hidden lg:block"
         } justify-center`}
-
       >
         <div className="flex justify-center text-2xl font-bold font-serif py-4 underline">
           LOCATIONS LIST
@@ -157,20 +290,20 @@ function Map({ selectedPeriod, sharedVariable, setSharedVariable }) {
               <li
                 key={index}
                 className="text-black font-serif hover:scale-105 hover:bg-orange-600/40 text-lg group"
-                title={place.current_name} 
               >
-                <a href="#" onClick={() => handlePlaceClick(index)} className="group-hover:underline">
-                  {index + 1}. {place.city}
-                  {place.current_name && (
-                    <span className="hidden group-hover:inline text-sm">
-                      {" "} (Currently: {place.current_name})
-                    </span>
-                  )}
+                <a
+                  href="#"
+                  onClick={() => handleButtonClick(index)}
+                  className="group-hover:underline"
+                >
+                  {index + 1}. {place.topic}
                 </a>
               </li>
             ))}
             {filteredData.length === 0 && (
-              <li className="text-black font-serif text-lg">No results found</li>
+              <li className="text-black font-serif text-lg">
+                No results found
+              </li>
             )}
           </ul>
         </div>
