@@ -38,7 +38,7 @@ function Map({ selectedPeriod }) {
       iconUrl: iconUrl,
       iconSize: [25, 41],
       iconAnchor: [12, 41],
-      shadowUrl: "../icons/marker-shadow.png", // Replace with actual shadow URL if needed
+      // shadowUrl: "../icons/marker-shadow.png", // Replace with actual shadow URL if needed
       shadowSize: [41, 41],
       shadowAnchor: [12, 41],
     });
