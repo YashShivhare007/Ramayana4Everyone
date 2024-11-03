@@ -1,26 +1,27 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLinkedin, faTwitter, faGithub } from '@fortawesome/free-brands-svg-icons';
+import { faLinkedin, faTwitter, faGithub, faGoogle } from '@fortawesome/free-brands-svg-icons';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { useEffect, useState } from 'react';
 
 function Contact({ onClose }) {
   let [imgData, setImgData] = useState(null);
-    useEffect(() => {
-      const fetchImg = async () => {
-        try {
-          let imgUrls = ['yash', 'rayaan', 'santhoshini'].map((name) => `https://backend-node-y6o2.onrender.com/image/${name}`);
-          const imgResponses = await Promise.all(imgUrls.map((url) => fetch(url)));
-          const imgBlobs = await Promise.all(imgResponses.map((response) => response.blob()));
-          const data = imgBlobs.map((blob) => URL.createObjectURL(blob));
-          setImgData(data);
-        }
-        catch (error) {
-          console.error("There was a problem with the fetch operation:", error);
-        }
+  
+  useEffect(() => {
+    const fetchImg = async () => {
+      try {
+        let imgUrls = ['yash', 'rayaan', 'santhoshini'].map((name) => `https://backend-node-y6o2.onrender.com/image/${name}`);
+        const imgResponses = await Promise.all(imgUrls.map((url) => fetch(url)));
+        const imgBlobs = await Promise.all(imgResponses.map((response) => response.blob()));
+        const data = imgBlobs.map((blob) => URL.createObjectURL(blob));
+        setImgData(data);
+      } catch (error) {
+        console.error("There was a problem with the fetch operation:", error);
       }
-      fetchImg();
-    }, []);
-    return (
+    }
+    fetchImg();
+  }, []);
+  
+  return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75 z-50 mt-16">
       <div className="relative flex flex-col items-center p-2 bg-slate-800 rounded-lg font-serif h-[72vh] md:h-[80vh] w-[80vw] md:w-[60vw] overflow-y-auto md:overflow-hidden shadow-2xl border border-orange-500">
         <button
@@ -47,8 +48,8 @@ function Contact({ onClose }) {
               <a href="https://www.linkedin.com/in/yashshivhare007" target="_blank" rel="noopener noreferrer">
                 <FontAwesomeIcon icon={faLinkedin} className="text-xl hover:text-blue-700 transition-transform transform hover:scale-125" />
               </a>
-              <a href="https://twitter.com/jessicaparker" target="_blank" rel="noopener noreferrer">
-                <FontAwesomeIcon icon={faTwitter} className="text-xl hover:text-blue-500 transition-transform transform hover:scale-125" />
+              <a href="https://mail.google.com/mail/?view=cm&fs=1&to=shivhareyash007@gmail.com" target="_blank" rel="noopener noreferrer">
+                <FontAwesomeIcon icon={faGoogle} className="text-xl hover:text-red-500 transition-transform transform hover:scale-125" />
               </a>
               <a href="https://github.com/YashShivhare007" target="_blank" rel="noopener noreferrer">
                 <FontAwesomeIcon icon={faGithub} className="text-xl hover:text-black transition-transform transform hover:scale-125" />
@@ -56,7 +57,7 @@ function Contact({ onClose }) {
             </div>
           </div>
           <div className="flex-shrink-0 w-full m-2 md:w-1/3 h-[35vh] flex flex-col items-center bg-gray-300 rounded-lg shadow-lg py-5 px-0 transform transition-all hover:scale-105 border border-orange-500">
-          {imgData && <img src={imgData[1]} alt="Rayaan Khan" className="rounded-full w-32 h-32 mb-4" />}
+            {imgData && <img src={imgData[1]} alt="Rayaan Khan" className="rounded-full w-32 h-32 mb-4" />}
             <div className="text-center">
               <p className="font-semibold text-lg text-orange-500">Rayaan Khan</p>
               <p className="text-sm text-black">CSE IIITH</p>
@@ -65,8 +66,8 @@ function Contact({ onClose }) {
               <a href="https://www.linkedin.com/in/rayaank" target="_blank" rel="noopener noreferrer">
                 <FontAwesomeIcon icon={faLinkedin} className="text-xl hover:text-blue-700 transition-transform transform hover:scale-125" />
               </a>
-              <a href="https://x.com/RayaanKhan2003" target="_blank" rel="noopener noreferrer">
-                <FontAwesomeIcon icon={faTwitter} className="text-xl hover:text-blue-500 transition-transform transform hover:scale-125" />
+              <a href="https://mail.google.com/mail/?view=cm&fs=1&to=khan.rayaan2003@gmail.com" target="_blank" rel="noopener noreferrer">
+                <FontAwesomeIcon icon={faGoogle} className="text-xl hover:text-red-500 transition-transform transform hover:scale-125" />
               </a>
               <a href="https://github.com/rayaankhan" target="_blank" rel="noopener noreferrer">
                 <FontAwesomeIcon icon={faGithub} className="text-xl hover:text-black transition-transform transform hover:scale-125" />
@@ -83,8 +84,8 @@ function Contact({ onClose }) {
               <a href="https://www.linkedin.com/in/jessicaparker" target="_blank" rel="noopener noreferrer">
                 <FontAwesomeIcon icon={faLinkedin} className="text-xl hover:text-blue-700 transition-transform transform hover:scale-125" />
               </a>
-              <a href="https://twitter.com/jessicaparker" target="_blank" rel="noopener noreferrer">
-                <FontAwesomeIcon icon={faTwitter} className="text-xl hover:text-blue-500 transition-transform transform hover:scale-125" />
+              <a href="https://mail.google.com/mail/?view=cm&fs=1&to=santhuthota456@gmail.com" target="_blank" rel="noopener noreferrer">
+                <FontAwesomeIcon icon={faGoogle} className="text-xl hover:text-red-500 transition-transform transform hover:scale-125" />
               </a>
               <a href="https://github.com/jessicaparker" target="_blank" rel="noopener noreferrer">
                 <FontAwesomeIcon icon={faGithub} className="text-xl hover:text-black transition-transform transform hover:scale-125" />

@@ -1,8 +1,4 @@
-.custom-popup .leaflet-popup-content-wrapper {
-    @apply bg-gray-100 rounded-lg;
-  }
-  
-  .custom-popup .leaflet-popup-tip-container {
-    display: none; /* Optional: hide the small arrow pointer */
-  }
-  
+.leaflet-popup-content-wrapper {
+  background-color: rgba(217, 221, 226, 0.856) !important; /* Use !important to force this style */
+  border-radius: 0.5rem !important; /* Use !important to prevent overrides */
+}

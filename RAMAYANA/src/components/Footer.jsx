@@ -102,7 +102,7 @@ function Footer({ onPeriodChange }) {
       </Dock>
 
       {/* For small and medium screens (below lg), render two separate Docks */}
-      <Dock className="lg:hidden">
+      <Dock className="lg:hidden px-3">
         <DockIcon
           icon={faChild} // Child icon for "Balakanda"
           label="BALA"
@@ -127,7 +127,7 @@ function Footer({ onPeriodChange }) {
           onClick={() => onPeriodChange("aranya")}
         />
       </Dock>
-      <Dock className="lg:hidden">
+      <Dock className="lg:hidden px-3">
         <DockIcon
           icon={faHandshake} // Alliance icon for "Kishkindhakanda"
           label="KISHKINDHA"

@@ -17,7 +17,6 @@ const markerIcons = {
   kishkindha: "/images/marker/purple.png",
   sundara: "/images/marker/yellow.png",
   yuddha: "/images/marker/maroon.png",
-  uttara: "/images/marker/maroon.png",
 };
 
 function Map({ selectedPeriod }) {
@@ -224,7 +223,7 @@ function Map({ selectedPeriod }) {
         <MapContainer
           center={mapCenter}
           zoom={mapZoom}
-          style={{ height: "800px", width: "100%" }}
+          style={{ height: "80vh", width: "100%",backgroundColor:'transparent' }}
         >
           <TileLayer
             attribution='© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -248,14 +247,14 @@ function Map({ selectedPeriod }) {
                     click: () => handleButtonClick(index),
                   }}
                 >
-                  <Popup className="custom-popup">
-                    <div className="popup-buttons-container">
+                  <Popup className="bg-gray-300 bg-opacity-50 rounded-lg shadow-md">
+                    <div className="popup-buttons-container bg-transparent">
                       {/* Incident List */}
                       {getIncidentPointIndexes(place).map(
                         (incidentPoint, i, arr) => (
                           <React.Fragment key={i}>
                             <button
-                              className="popup-button px-1.5 py-1 mx-0.5 mb-2 border border-gray-400 rounded-md"
+                              className="popup-button px-1.5 py-1 mx-0.5 mb-2 border border-orange-600 text-white bg-orange-500 rounded-md"
                               onClick={() =>
                                 handleButtonClick(incidentPoint.no - 1)
                               }
@@ -267,7 +266,7 @@ function Map({ selectedPeriod }) {
                       )}
 
                       {/* Heading */}
-                      <h3 className="popup-heading font-semibold pb-1">
+                      <h3 className="popup-heading font-semibold pb-1 text-orange-600">
                         {place.no}. {place.topic}
                       </h3>
 
@@ -277,7 +276,7 @@ function Map({ selectedPeriod }) {
                       {/* Navigation Buttons */}
                       {index - 1 >= 0 && (
                         <button
-                          className="popup-button border border-gray-400 rounded-md px-1.5 py-0.5 mx-0.5"
+                          className="popup-button border border-orange-600 bg-orange-500 text-white rounded-md px-1.5 py-0.5 mx-0.5"
                           onClick={() => handleButtonClick(index - 1)}
                         >
                           Prev
@@ -285,7 +284,7 @@ function Map({ selectedPeriod }) {
                       )}
                       {index + 1 < currData.length && (
                         <button
-                          className="popup-button border border-gray-400 rounded-md px-1.5 py-0.5 mx-0.5"
+                          className="popup-button border border-orange-600 bg-orange-500 text-white rounded-md px-1.5 py-0.5 mx-0.5"
                           onClick={() => handleButtonClick(index + 1)}
                         >
                           Next
@@ -302,7 +301,7 @@ function Map({ selectedPeriod }) {
       </div>
 
       <div
-        className={`bg-slate-200 opacity-60 rounded-lg md:w-3/12 w-4/5 md:h-full text-black ${
+        className={`bg-slate-200/95 rounded-lg md:w-3/12 w-4/5 md:h-full text-black ${
           isSidebarVisible
             ? "absolute top-0 right-0 h-full w-3/5 z-30"
             : "hidden lg:block"

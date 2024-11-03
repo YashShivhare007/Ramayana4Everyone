@@ -52,7 +52,7 @@ function Navbar({ onSearch }) {
   };
 
   const isMobile = windowWidth < 1024;
-  const bgColor = isMobile || isScrolled ? "bg-white/30" : "bg-white/20";
+  const bgColor = isMobile || isScrolled ? "bg-slate-300" : "bg-white/50";
   const logo = Logo1;
   const textColor = isMobile || isScrolled ? "text-black" : "text-white";
 
@@ -66,7 +66,6 @@ function Navbar({ onSearch }) {
 
   const toggleSidebar2 = () => {
     setIsSidebar2Open(!isSidebar2Open);
-    // Close Sidebar1 when Sidebar2 is opened
     if (isSidebar1Open) {
       setIsSidebar1Open(false);
     }
